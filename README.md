@@ -100,6 +100,7 @@ The API uses JWT (JSON Web Tokens) for authentication. To access protected endpo
 ## Running Tests
 
 To run the unit tests:
+From ClayAccessControl.Tests
 
 ```
 dotnet test

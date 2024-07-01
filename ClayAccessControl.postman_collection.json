@@ -1,0 +1,1242 @@
+{
+	"info": {
+		"_postman_id": "1a4f9d86-1081-44ee-b199-40db52639e70",
+		"name": "ClayAccessControl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17471165"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login - 200",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"username\": \"admin\",\n     \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - 401",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"username\": \"admin1\",\n     \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Protected - Admin] Register - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjkzN2MyYzJhLTQ3ZTEtNGE5Ny1iZjhhLTI5NWRhZDUzNTBmYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzU4Mjk3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.MeFKDtwKN8SmQB85M4rtSzSq-dK6T4nxjLNqH7BPczw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user1\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password\",\n  \"firstName\": \"New\",\n  \"lastName\": \"User\",\n  \"officeId\": 2,\n  \"roles\": [\"Employee\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Protected - Admin] Register - 400 - Roles not found",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"newuser1\",\n  \"password\": \"password\",\n  \"email\": \"newuser1@example.com\",\n  \"firstName\": \"New\",\n  \"lastName\": \"User\",\n  \"roles\": [\"CEO\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[Protected - Manager / Admin] Door CRUD",
+			"item": [
+				{
+					"name": "[Admin only] Get All Doors - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjkzN2MyYzJhLTQ3ZTEtNGE5Ny1iZjhhLTI5NWRhZDUzNTBmYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzU4Mjk3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.MeFKDtwKN8SmQB85M4rtSzSq-dK6T4nxjLNqH7BPczw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/door",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"doorName\": \"Main Entrance\",\n    \"requiredAccessLevel\": 1,\n    \"officeId\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GrantDoorAccess - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJtYW5hZ2VyQGNsYXkuY29tIiwianRpIjoiMTUyMGUzMjktYTg5Ni00YTM2LWEzMjktMDE4Njg3OWE5MGRiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiTWFuYWdlciIsImV4cCI6MTcxOTc3MDQ3MiwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.74PNkxJVhwxPlr_3anDlnkBxIL4q1AoIxeL-I375M1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 3,\n  \"doorId\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door/grantaccess",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"grantaccess"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RevokeDoorAccess - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJtYW5hZ2VyQGNsYXkuY29tIiwianRpIjoiMTUyMGUzMjktYTg5Ni00YTM2LWEzMjktMDE4Njg3OWE5MGRiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiTWFuYWdlciIsImV4cCI6MTcxOTc3MDQ3MiwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.74PNkxJVhwxPlr_3anDlnkBxIL4q1AoIxeL-I375M1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 3,\n  \"doorId\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door/grantaccess",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"grantaccess"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Doors by Office - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/door/ByOffice/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"ByOffice",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"doorId\": 5,\n    \"doorName\": \"Updated Second Entrance2\",\n    \"requiredAccessLevel\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update - 400",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"doorId\": 3,\n    \"doorName\": \"Updated Second Entrance\",\n    \"requiredAccessLevel\": 2,\n    \"officeId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete - 200 Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/door/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[Protected - Admin] Office CRUD",
+			"item": [
+				{
+					"name": "Get All - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjkzN2MyYzJhLTQ3ZTEtNGE5Ny1iZjhhLTI5NWRhZDUzNTBmYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzU4Mjk3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.MeFKDtwKN8SmQB85M4rtSzSq-dK6T4nxjLNqH7BPczw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/office",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"office"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjkzN2MyYzJhLTQ3ZTEtNGE5Ny1iZjhhLTI5NWRhZDUzNTBmYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzU4Mjk3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.MeFKDtwKN8SmQB85M4rtSzSq-dK6T4nxjLNqH7BPczw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"officeName\": \"New York Office\",\n  \"address\": \"123 Broadway, New York, NY 10001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/office",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"office"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/office/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"office",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"officeId\": 2,\n  \"officeName\": \"Updated New York Office\",\n  \"address\": \"456 Fifth Avenue, New York, NY 10018\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/office/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"office",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update - 400",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"officeId\": 2,\n  \"officeName\": \"Updated New York Office\",\n  \"address\": \"456 Fifth Avenue, New York, NY 10018\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/office/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"office",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjliYWRlZDhkLTliYmMtNGMyNy1iZmU0LWU0ODExYTA2Y2RjZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzUwOTY3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0._dpYh1CqbCOSVai2FxlEhzeJv2TXVZfGNXGDjYW6h9U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/office/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"office",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[Protected - Depends on authorization configured] Door Locking System",
+			"item": [
+				{
+					"name": "GetDoorStatus - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJtYW5hZ2VyQGNsYXkuY29tIiwianRpIjoiMTUyMGUzMjktYTg5Ni00YTM2LWEzMjktMDE4Njg3OWE5MGRiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiTWFuYWdlciIsImV4cCI6MTcxOTc3MDQ3MiwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.74PNkxJVhwxPlr_3anDlnkBxIL4q1AoIxeL-I375M1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/door/2/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"2",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lock Door - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJlbXBsb3llZTFAY2xheS5jb20iLCJqdGkiOiJkNmNiNzY3NC1jNzMyLTQ0NjctOTFmMS00MzA2OWNmNDdmODIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFbXBsb3llZSIsImV4cCI6MTcxOTc3MTQ2OCwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.Mn_ZhwgeUlBbK8el0MnIi1cbGqvZdkExpwh-nIdQAac",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door/2/lock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"2",
+								"lock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unlock Door - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJlbXBsb3llZTFAY2xheS5jb20iLCJqdGkiOiJkNmNiNzY3NC1jNzMyLTQ0NjctOTFmMS00MzA2OWNmNDdmODIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFbXBsb3llZSIsImV4cCI6MTcxOTc3MTQ2OCwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.Mn_ZhwgeUlBbK8el0MnIi1cbGqvZdkExpwh-nIdQAac",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5240/api/door/2/unlock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"2",
+								"unlock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[Protected - Manager / Admin] Events log",
+			"item": [
+				{
+					"name": "Get all events - Admin - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjMxY2E3NWM0LTgxYjAtNGI5MS04ZDMzLTUxZDFjNTgwOGVkNiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzgzOTE0LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.vRevLoXKh73HEWh4zDwdTWvNgHkxGkKG6dy7Kd-KTGY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/Event?PageSize=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"Event"
+							],
+							"query": [
+								{
+									"key": "OfficeId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "StartDate",
+									"value": "2023-01-01",
+									"disabled": true
+								},
+								{
+									"key": "EndDate",
+									"value": "2023-12-31",
+									"disabled": true
+								},
+								{
+									"key": "EventType",
+									"value": "DoorUnlocked",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": "123",
+									"disabled": true
+								},
+								{
+									"key": "DoorId",
+									"value": "456",
+									"disabled": true
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events for specific office - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjMxY2E3NWM0LTgxYjAtNGI5MS04ZDMzLTUxZDFjNTgwOGVkNiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzgzOTE0LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.vRevLoXKh73HEWh4zDwdTWvNgHkxGkKG6dy7Kd-KTGY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/Event?OfficeId=1&PageSize=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"Event"
+							],
+							"query": [
+								{
+									"key": "OfficeId",
+									"value": "1"
+								},
+								{
+									"key": "StartDate",
+									"value": "2023-01-01",
+									"disabled": true
+								},
+								{
+									"key": "EndDate",
+									"value": "2023-12-31",
+									"disabled": true
+								},
+								{
+									"key": "EventType",
+									"value": "DoorUnlocked",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": "123",
+									"disabled": true
+								},
+								{
+									"key": "DoorId",
+									"value": "456",
+									"disabled": true
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events with end and start date - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjMxY2E3NWM0LTgxYjAtNGI5MS04ZDMzLTUxZDFjNTgwOGVkNiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzgzOTE0LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.vRevLoXKh73HEWh4zDwdTWvNgHkxGkKG6dy7Kd-KTGY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/Event?StartDate=2023-01-01&EndDate=2023-12-31&PageSize=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"Event"
+							],
+							"query": [
+								{
+									"key": "OfficeId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "StartDate",
+									"value": "2023-01-01"
+								},
+								{
+									"key": "EndDate",
+									"value": "2023-12-31"
+								},
+								{
+									"key": "EventType",
+									"value": "DoorUnlocked",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": "123",
+									"disabled": true
+								},
+								{
+									"key": "DoorId",
+									"value": "456",
+									"disabled": true
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events with event type - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJlbXBsb3llZTFAY2xheS5jb20iLCJqdGkiOiI4MDRjYTA3Yy02ODdkLTRiZjctOGI4NC04Yzg2NTM0YmE2YzQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFbXBsb3llZSIsImV4cCI6MTcxOTc4NDcyNCwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.GGUMgAxLlaMUTY6P357tFvPLCcFAK_ImcrqOYWXA53c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/Event?EventType=DoorUnlocked&PageSize=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"Event"
+							],
+							"query": [
+								{
+									"key": "OfficeId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "StartDate",
+									"value": "2023-01-01",
+									"disabled": true
+								},
+								{
+									"key": "EndDate",
+									"value": "2023-12-31",
+									"disabled": true
+								},
+								{
+									"key": "EventType",
+									"value": "DoorUnlocked"
+								},
+								{
+									"key": "UserId",
+									"value": "123",
+									"disabled": true
+								},
+								{
+									"key": "DoorId",
+									"value": "456",
+									"disabled": true
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events for specific user - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjMxY2E3NWM0LTgxYjAtNGI5MS04ZDMzLTUxZDFjNTgwOGVkNiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzgzOTE0LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.vRevLoXKh73HEWh4zDwdTWvNgHkxGkKG6dy7Kd-KTGY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/Event?UserId=2&PageSize=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"Event"
+							],
+							"query": [
+								{
+									"key": "OfficeId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "StartDate",
+									"value": "2023-01-01",
+									"disabled": true
+								},
+								{
+									"key": "EndDate",
+									"value": "2023-12-31",
+									"disabled": true
+								},
+								{
+									"key": "EventType",
+									"value": "DoorUnlocked",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": "2"
+								},
+								{
+									"key": "DoorId",
+									"value": "456",
+									"disabled": true
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events for specific door - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjMxY2E3NWM0LTgxYjAtNGI5MS04ZDMzLTUxZDFjNTgwOGVkNiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzgzOTE0LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.vRevLoXKh73HEWh4zDwdTWvNgHkxGkKG6dy7Kd-KTGY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/Event?DoorId=1&PageSize=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"Event"
+							],
+							"query": [
+								{
+									"key": "OfficeId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "StartDate",
+									"value": "2023-01-01",
+									"disabled": true
+								},
+								{
+									"key": "EndDate",
+									"value": "2023-12-31",
+									"disabled": true
+								},
+								{
+									"key": "EventType",
+									"value": "DoorUnlocked",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "DoorId",
+									"value": "1"
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

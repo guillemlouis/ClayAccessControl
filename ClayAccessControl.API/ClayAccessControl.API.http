@@ -1,0 +1,6 @@
+@ClayAccessControl.API_HostAddress = http://localhost:5240
+
+GET {{ClayAccessControl.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

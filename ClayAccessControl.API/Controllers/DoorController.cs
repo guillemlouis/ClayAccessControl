@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using ClayAccessControl.Core.Interfaces;
 using ClayAccessControl.Core.DTOs;
 using ClayAccessControl.Core.Exceptions;
+using ClayAccessControl.API.Models;
+using ClayAccessControl.API.Filters;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -27,26 +29,26 @@ namespace ClayAccessControl.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<IEnumerable<DoorDto>>> GetDoors()
+        public async Task<IActionResult> GetDoors()
         {
             var doors = await _doorService.GetAllDoorsAsync(UserId);
-            return Ok(doors);
+            return this.ApiOk(doors, "Doors retrieved successfully");
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<DoorDto>> GetDoor(int id)
+        public async Task<IActionResult> GetDoor(int id)
         {
             var door = await _doorService.GetDoorByIdAsync(id, UserId);
-            return Ok(door);
+            return this.ApiOk(door, "Door retrieved successfully");
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<DoorDto>> CreateDoor(CreateDoorDto createDoorDto)
+        public async Task<IActionResult> CreateDoor(CreateDoorDto createDoorDto)
         {
             var createdDoor = await _doorService.CreateDoorAsync(UserId, createDoorDto);
-            return CreatedAtAction(nameof(GetDoor), new { id = createdDoor.DoorId }, createdDoor);
+            return this.ApiCreated(createdDoor, "Door created successfully");
         }
 
         [HttpPut("{id}")]
@@ -54,7 +56,7 @@ namespace ClayAccessControl.API.Controllers
         public async Task<IActionResult> UpdateDoor(int id, UpdateDoorDto updateDoorDto)
         {
             await _doorService.UpdateDoorAsync(id, UserId, updateDoorDto);
-            return NoContent();
+            return this.ApiOk<object>(null, "Door updated successfully");
         }
 
         [HttpDelete("{id}")]
@@ -62,35 +64,36 @@ namespace ClayAccessControl.API.Controllers
         public async Task<IActionResult> DeleteDoor(int id)
         {
             await _doorService.DeleteDoorAsync(id, UserId);
-            return NoContent();
+            return this.ApiOk<object>(null, "Door deleted successfully");
         }
 
         [HttpGet("ByOffice/{officeId}")]
-        public async Task<ActionResult<IEnumerable<DoorDto>>> GetDoorsByOffice(int officeId)
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> GetDoorsByOffice(int officeId)
         {
             var doors = await _doorService.GetDoorsByOfficeAsync(officeId, UserId);
-            return Ok(doors);
+            return this.ApiOk(doors, "Doors retrieved successfully");
         }
 
         [HttpGet("{id}/Status")]
-        public async Task<ActionResult<DoorStatusDto>> GetDoorStatus(int id)
+        public async Task<IActionResult> GetDoorStatus(int id)
         {
             var status = await _doorService.GetDoorStatusAsync(id, UserId);
-            return Ok(status);
+            return this.ApiOk(status, "Door status retrieved successfully");
         }
 
         [HttpPost("{id}/Unlock")]
-        public async Task<ActionResult<string>> UnlockDoor(int id)
+        public async Task<IActionResult> UnlockDoor(int id)
         {
             var result = await _doorService.UnlockDoorAsync(id, UserId);
-            return Ok(result);
+            return this.ApiOk(result, "Door unlock operation completed");
         }
 
         [HttpPost("{id}/Lock")]
-        public async Task<ActionResult<string>> LockDoor(int id)
+        public async Task<IActionResult> LockDoor(int id)
         {
             var result = await _doorService.LockDoorAsync(id, UserId);
-            return Ok(result);
+            return this.ApiOk(result, "Door lock operation completed");
         }
 
         [HttpPost("GrantAccess")]
@@ -98,7 +101,8 @@ namespace ClayAccessControl.API.Controllers
         public async Task<IActionResult> GrantAccess([FromBody] GrantAccessDto grantAccessDto)
         {
             await _doorService.GrantAccessAsync(grantAccessDto, UserId);
-            return Ok("Access granted successfully.");
+            return this.ApiOk<object>(null, "Access granted successfully");
+
         }
 
         [HttpPost("RevokeAccess")]
@@ -106,27 +110,12 @@ namespace ClayAccessControl.API.Controllers
         public async Task<IActionResult> RevokeAccess([FromBody] RevokeAccessDto revokeAccessDto)
         {
             await _doorService.RevokeAccessAsync(revokeAccessDto, UserId);
-            return Ok("Access revoked successfully.");
+            return this.ApiOk<object>(null, "Access revoked successfully");
         }
 
         // Property to get UserId set by the UserIdFilter
         private int UserId => (int)HttpContext.Items["UserId"];
     }
 
-    public class UserIdFilterAttribute : ActionFilterAttribute
-    {
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (int.TryParse(userId, out int parsedUserId))
-            {
-                context.HttpContext.Items["UserId"] = parsedUserId;
-            }
-            else
-            {
-                context.Result = new UnauthorizedResult();
-            }
-            base.OnActionExecuting(context);
-        }
-    }
+    
 }

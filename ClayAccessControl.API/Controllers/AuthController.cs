@@ -4,6 +4,7 @@ using ClayAccessControl.Core.Interfaces;
 using ClayAccessControl.Core.DTOs;
 using ClayAccessControl.Infrastructure.Services;
 using ClayAccessControl.Core.Exceptions;
+using ClayAccessControl.API.Models;
 using System.Threading.Tasks;
 
 namespace ClayAccessControl.API.Controllers
@@ -13,9 +14,9 @@ namespace ClayAccessControl.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly JwtService _jwtService;
+        private readonly IJwtService _jwtService;
 
-        public AuthController(IAuthService authService, JwtService jwtService)
+        public AuthController(IAuthService authService, IJwtService jwtService)
         {
             _authService = authService;
             _jwtService = jwtService;
@@ -26,7 +27,8 @@ namespace ClayAccessControl.API.Controllers
         {
             var (user, roles) = await _authService.AuthenticateAsync(model.Username, model.Password);
             var token = _jwtService.GenerateToken(user, roles);
-            return Ok(new { Token = token, Roles = roles });
+            var response = new { Token = token, Roles = roles };
+            return this.ApiOk(response, "Login successful");
         }
 
         [HttpPost("register")]
@@ -34,7 +36,8 @@ namespace ClayAccessControl.API.Controllers
         public async Task<IActionResult> Register(RegisterDto model)
         {
             var user = await _authService.RegisterUserAsync(model);
-            return StatusCode(201, new { Message = "User registered successfully", UserId = user.UserId });
+            var response = new { UserId = user.UserId };
+            return this.ApiCreated(response, "User registered successfully");
         }
     }
 }

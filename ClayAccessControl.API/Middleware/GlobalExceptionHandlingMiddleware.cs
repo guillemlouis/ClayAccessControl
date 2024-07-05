@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ClayAccessControl.Core.Exceptions;
+using ClayAccessControl.API.Models;
 
 namespace ClayAccessControl.API.Middleware
 {
@@ -64,7 +65,8 @@ namespace ClayAccessControl.API.Middleware
 
             _logger.LogError(exception, "An error occurred: {Message}", message);
 
-            var result = JsonSerializer.Serialize(new { error = message });
+            var response = new ApiResponse<object>(null, message, false);
+            var result = JsonSerializer.Serialize(response);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
             await context.Response.WriteAsync(result);

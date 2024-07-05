@@ -7,9 +7,11 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using ClayAccessControl.Core.Models;
 using ClayAccessControl.Core.Entities;
+using ClayAccessControl.Core.Interfaces;
+
 
 namespace ClayAccessControl.Infrastructure.Services{
-    public class JwtService
+    public class JwtService : IJwtService
     {
         private readonly AuthSettings _authSettings;
 

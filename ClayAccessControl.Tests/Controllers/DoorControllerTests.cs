@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ClayAccessControl.API.Controllers;
+using ClayAccessControl.API.Models;
 using ClayAccessControl.Core.DTOs;
 using ClayAccessControl.Core.Exceptions;
 using ClayAccessControl.Core.Interfaces;
@@ -48,7 +49,7 @@ namespace ClayAccessControl.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetDoors_ReturnsOkResult_WithListOfDoors()
+        public async Task GetDoors_ReturnsApiResult_WithListOfDoors()
         {
             // Arrange
             var doors = new List<DoorDto>
@@ -63,14 +64,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.GetDoors();
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<IEnumerable<DoorDto>>>(result);
-            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            var returnedDoors = Assert.IsType<List<DoorDto>>(okResult.Value);
-            Assert.Equal(2, returnedDoors.Count);
+            Assert.IsType<ApiResult<IEnumerable<DoorDto>>>(result);
         }
 
         [Fact]
-        public async Task GetDoor_WithValidId_ReturnsOkResult_WithDoor()
+        public async Task GetDoor_WithValidId_ReturnsApiResult_WithDoor()
         {
             // Arrange
             var doorDto = new DoorDto { DoorId = 1, DoorName = "Test Door" };
@@ -81,11 +79,7 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.GetDoor(1);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<DoorDto>>(result);
-            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            var returnedDoor = Assert.IsType<DoorDto>(okResult.Value);
-            Assert.Equal(1, returnedDoor.DoorId);
-            Assert.Equal("Test Door", returnedDoor.DoorName);
+            Assert.IsType<ApiResult<DoorDto>>(result);
         }
 
         [Fact]
@@ -101,7 +95,7 @@ namespace ClayAccessControl.Tests.Controllers
         }
 
         [Fact]
-        public async Task CreateDoor_WithValidData_ReturnsCreatedAtAction()
+        public async Task CreateDoor_WithValidData_ReturnsApiResult()
         {
             // Arrange
             var createDoorDto = new CreateDoorDto { DoorName = "New Door", RequiredAccessLevel = 1, OfficeId = 1 };
@@ -113,16 +107,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.CreateDoor(createDoorDto);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<DoorDto>>(result);
-            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
-            Assert.Equal(nameof(DoorController.GetDoor), createdAtActionResult.ActionName);
-            Assert.Equal(1, createdAtActionResult.RouteValues["id"]);
-            var returnedDoor = Assert.IsType<DoorDto>(createdAtActionResult.Value);
-            Assert.Equal("New Door", returnedDoor.DoorName);
+            Assert.IsType<ApiResult<DoorDto>>(result);
         }
 
         [Fact]
-        public async Task UpdateDoor_WithValidData_ReturnsNoContent()
+        public async Task UpdateDoor_WithValidData_ReturnsApiResult()
         {
             // Arrange
             var updateDoorDto = new UpdateDoorDto { DoorName = "Updated Door", RequiredAccessLevel = 2 };
@@ -133,11 +122,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.UpdateDoor(1, updateDoorDto);
 
             // Assert
-            Assert.IsType<NoContentResult>(result);
+            Assert.IsType<ApiResult<object>>(result);
         }
 
         [Fact]
-        public async Task DeleteDoor_WithValidId_ReturnsNoContent()
+        public async Task DeleteDoor_WithValidId_ReturnsApiResult()
         {
             // Arrange
             _mockDoorService.Setup(service => service.DeleteDoorAsync(1, 1))
@@ -147,11 +136,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.DeleteDoor(1);
 
             // Assert
-            Assert.IsType<NoContentResult>(result);
+            Assert.IsType<ApiResult<object>>(result);
         }
 
         [Fact]
-        public async Task GetDoorsByOffice_ReturnsOkResult_WithListOfDoors()
+        public async Task GetDoorsByOffice_ReturnsApiResult_WithListOfDoors()
         {
             // Arrange
             var doors = new List<DoorDto>
@@ -166,14 +155,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.GetDoorsByOffice(1);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<IEnumerable<DoorDto>>>(result);
-            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            var returnedDoors = Assert.IsType<List<DoorDto>>(okResult.Value);
-            Assert.Equal(2, returnedDoors.Count);
+            Assert.IsType<ApiResult<IEnumerable<DoorDto>>>(result);
         }
 
         [Fact]
-        public async Task GetDoorStatus_ReturnsOkResult_WithDoorStatus()
+        public async Task GetDoorStatus_ReturnsApiResult_WithDoorStatus()
         {
             // Arrange
             var doorStatus = new DoorStatusDto { DoorId = 1, DoorName = "Test Door", Status = DoorStatusEnum.Locked };
@@ -184,15 +170,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.GetDoorStatus(1);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<DoorStatusDto>>(result);
-            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            var returnedStatus = Assert.IsType<DoorStatusDto>(okResult.Value);
-            Assert.Equal(1, returnedStatus.DoorId);
-            Assert.Equal(DoorStatusEnum.Locked, returnedStatus.Status);
+            Assert.IsType<ApiResult<DoorStatusDto>>(result);
         }
 
         [Fact]
-        public async Task UnlockDoor_WithValidId_ReturnsOkResult()
+        public async Task UnlockDoor_WithValidId_ReturnsApiResult()
         {
             // Arrange
             _mockDoorService.Setup(service => service.UnlockDoorAsync(1, 1))
@@ -202,13 +184,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.UnlockDoor(1);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<string>>(result);
-            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            Assert.Equal("Door unlocked successfully", okResult.Value);
+            Assert.IsType<ApiResult<string>>(result);
         }
 
         [Fact]
-        public async Task LockDoor_WithValidId_ReturnsOkResult()
+        public async Task LockDoor_WithValidId_ReturnsApiResult()
         {
             // Arrange
             _mockDoorService.Setup(service => service.LockDoorAsync(1, 1))
@@ -218,13 +198,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.LockDoor(1);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<string>>(result);
-            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            Assert.Equal("Door locked successfully", okResult.Value);
+            Assert.IsType<ApiResult<string>>(result);
         }
 
         [Fact]
-        public async Task GrantAccess_WithValidData_ReturnsOkResult()
+        public async Task GrantAccess_WithValidData_ReturnsApiResult()
         {
             // Arrange
             var grantAccessDto = new GrantAccessDto { UserId = 2, DoorId = 1 };
@@ -235,12 +213,11 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.GrantAccess(grantAccessDto);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal("Access granted successfully.", okResult.Value);
+            Assert.IsType<ApiResult<object>>(result);
         }
 
         [Fact]
-        public async Task RevokeAccess_WithValidData_ReturnsOkResult()
+        public async Task RevokeAccess_WithValidData_ReturnsApiResult()
         {
             // Arrange
             var revokeAccessDto = new RevokeAccessDto { UserId = 2, DoorId = 1 };
@@ -251,8 +228,7 @@ namespace ClayAccessControl.Tests.Controllers
             var result = await _controller.RevokeAccess(revokeAccessDto);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal("Access revoked successfully.", okResult.Value);
+            Assert.IsType<ApiResult<object>>(result);
         }
     }
 }

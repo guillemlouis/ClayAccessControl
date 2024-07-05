@@ -117,7 +117,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjkzN2MyYzJhLTQ3ZTEtNGE5Ny1iZjhhLTI5NWRhZDUzNTBmYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5NzU4Mjk3LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.MeFKDtwKN8SmQB85M4rtSzSq-dK6T4nxjLNqH7BPczw",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjUwYTcwNjJmLWY2MWUtNGIxOS04ZjZjLTNjMTA5YjMwZGJlOSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5ODQ0ODkzLCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.3u3iCSk69Y1qbV1UqoLGPozBg3lAnSguHgZnh7oAp7k",
 									"type": "string"
 								}
 							]
@@ -185,7 +185,7 @@
 			"name": "[Protected - Manager / Admin] Door CRUD",
 			"item": [
 				{
-					"name": "[Admin only] Get All Doors - 200",
+					"name": "Get All Doors - 200",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -209,6 +209,37 @@
 							"path": [
 								"api",
 								"door"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Door - 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBjbGF5LmNvbSIsImp0aSI6IjEzMzU0ZDQ5LTM2OWUtNDgyZS04NjkwLTQ1OTA4M2VmYmJiOCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzE5OTk3MzQ2LCJpc3MiOiJDbGF5QWNjZXNzQ29udHJvbCIsImF1ZCI6IkNsYXlBY2Nlc3NDb250cm9sQ2xpZW50In0.UPF0KTQvDmaMH6hkiVV-zVsSGzi-RaQzEoQ0G0o_0i0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5240/api/door/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5240",
+							"path": [
+								"api",
+								"door",
+								"9"
 							]
 						}
 					},
@@ -446,7 +477,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete - 200 Copy",
+					"name": "Delete - 200",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1237,6 +1268,12 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "Token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJtYW5hZ2VyQGNsYXkuY29tIiwianRpIjoiMTQ0NmJiMDctYjBiYy00NzA0LTg5ZGUtZDY2ZWFkYWI5MWNiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiTWFuYWdlciIsImV4cCI6MTcxOTg0OTg3OSwiaXNzIjoiQ2xheUFjY2Vzc0NvbnRyb2wiLCJhdWQiOiJDbGF5QWNjZXNzQ29udHJvbENsaWVudCJ9.jjsq-Ez0efqXLX8-D-e-IC98vtzbpB96vjUnH9BMpus"
 		}
 	]
 }

@@ -11,7 +11,7 @@ This project is an API for managing access control in an office environment, all
 
 1. Clone the repository:
    ```
-   git clone https://github.com/guillemlouis/clay.git
+   git clone https://github.com/guillemlouis/ClayAccessControl.git
    cd ClayAccessControl
    ```
 

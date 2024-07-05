@@ -22,12 +22,13 @@ This project is an API for managing access control in an office environment, all
 
 3. Update the database with the latest migrations:
    ```
+   cd ClayAccessControl.API
    dotnet ef database update
    ```
 
 4. Run the application:
    ```
-   dotnet run --project ClayAccessControl.API
+   dotnet run
    ```
 5. Use existing test data [TESTDATA.md](TESTDATA.md)
 
